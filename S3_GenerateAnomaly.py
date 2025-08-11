@@ -20,7 +20,7 @@ class MEGenerateAnomaly:
             config = yaml.safe_load(f)
         self.chamber_params = config["MEs"][self.me_name]
         ring_info = self.chamber_params["ring_"+ring]
-        if len(ring_info==1): # Multi-ring not implemented yet
+        if len(ring_info)==1: # Multi-ring not implemented yet
             self.ring_info = ring_info[0]
         else:
             raise RuntimeError("Multi-ring not implemented yet (hRHGlobalm1)")
