@@ -66,3 +66,5 @@ for dir in tqdm(me_dirs, desc="Processing MEs"):
     del monitoring_elements
     
 db.update_step(job_id, "S0", job_path+"/"+me+f'_step0_part*.parquet')
+print("Your job id is: ", job_id)
+
