@@ -1,7 +1,7 @@
 # Training DQM Tool for CSC
 
 ```
-git clone https://github.com/Ma128-bit/ML4DQM-v2.git
+git clone https://github.com/Ma128-bit/ML4DQM.git
 ```
 
 ## Get Monitoring elements (ME)
