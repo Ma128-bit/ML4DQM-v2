@@ -6,3 +6,4 @@ runregistry
 matplotlib
 scipy
 pyyaml
+omsapi
