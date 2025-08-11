@@ -125,12 +125,12 @@ python3 S2_training.py --job_id XXXXXXX --ring ["in" or "out"]
 
 ### S3: Generate fake anomalies
 ```=shell
-conda activate pytorch
+conda activate pytorch (or source /cvmfs/sft.cern.ch/lcg/views/LCG_108_swan/x86_64-el9-gcc13-opt/setup.sh)
 python3 S3_GenerateAnomaly.py --job_id XXXXXXX --ring ["in" or "out"]
 ```
 ### S4: Study model performance with the fake anomalies
 ```=shell
-conda activate pytorch
+conda activate pytorch (or source /cvmfs/sft.cern.ch/lcg/views/LCG_108_swan/x86_64-el9-gcc13-opt/setup.sh)
 python3 S4_performance.py --job_id XXXXXXX --ring ["in" or "out"]
 ```
 Optional argument: ` --anomalysample ` path to a custom set of anomalies
