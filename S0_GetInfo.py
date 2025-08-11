@@ -7,7 +7,7 @@ import Utilities.database as db
 
 parser = argparse.ArgumentParser()
 #parser.add_argument("--out_label", type=str, default="test", help="output label")
-parser.add_argument('-m', '--mename', , type=str, default="hRHGlobalm2", help="ME name")
+parser.add_argument('-m', '--mename', type=str, default="hRHGlobalm2", help="ME name")
 parser.add_argument('-p',"--path", type=str, default="../ML4DQM/MEs/", help="parquet file location")
 parser.add_argument("--conda_env", type=str, default="/lustrehome/mbuonsante/miniconda3/envs/oms", help="OMS/RR conda env")
 
