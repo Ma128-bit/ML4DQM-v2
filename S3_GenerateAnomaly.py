@@ -35,7 +35,7 @@ class MEGenerateAnomaly:
         self.monitoring_elements["img_"+ring] = self.monitoring_elements["img_"+ring].apply(lambda histo: np.vstack(histo).astype(np.float64))
 
     def genanomay(self):
-        self.df_anomalies = anomaly.main(self.monitoring_elements, self.model, self.ring, self.ring_info[0], self.ring_info[1])
+        self.df_anomalies = anomaly.main(self.monitoring_elements, self.model, "img_"+self.ring, self.ring_info[0], self.ring_info[1])
             
     def save(self):
         self.df_anomalies.to_parquet(self.output_name, index=False)
