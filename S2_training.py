@@ -32,6 +32,14 @@ class METraining:
 
     def training(self):
         scripted_model = ResNet.train(self.monitoring_elements, self.output_path, "img_"+ring, **self.training_params)
+
+        if torch.cuda.is_available():
+            scripted_model.save(f"{self.output_path}/trained_model_{ring}_cuda.pth")
+            scripted_model.to("cpu").save(f"{self.output_path}/trained_model_{ring}_cpu.pth")
+            scripted_model.to("cuda")
+        else:
+            scripted_model.save(f"{self.output_path}/trained_model_{ring}_cpu.pth")
+
         self.model = scripted_model
         print("[S2] Training completed!")
 
