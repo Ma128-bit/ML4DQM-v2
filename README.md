@@ -107,14 +107,19 @@ python3 S1_PreProcessing.py --job_id XXXXXXX
 ```
 
 ### S2: Train Autoencoder
+NOT on LXPLUS:
 ```=shell
 conda create --name pytorch python=3.9
 conda activate pytorch
 pip3 install -r requirementsTraining.txt
 ```
 
+ON LXPLUS:
 ```=shell
-conda activate pytorch
+source /cvmfs/sft.cern.ch/lcg/views/LCG_108_swan/x86_64-el9-gcc13-opt/setup.sh
+```
+
+```=shell
 python3 S2_training.py --job_id XXXXXXX --ring ["in" or "out"]
 ```
 
