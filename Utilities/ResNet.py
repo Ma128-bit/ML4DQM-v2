@@ -20,12 +20,6 @@ def train(df: pd.DataFrame, output_path: str, data_name: str, batch_size: int = 
             break
         del trainer
     scripted_model = torch.jit.script(trainer.model)
-
-    scripted_model.save(f"{output_path}/trained_model_{data_name}_{device}.pth")
-    if torch.cuda.is_available():
-        scripted_model.to("cpu").save(f"{output_path}/trained_model_{data_name}_cpu.pth")
-        scripted_model.to(device)
-
     return scripted_model
 
 def predictions(df: pd.DataFrame, model: torch.jit.ScriptModule, data_name: str, num_sectors: int) -> pd.DataFrame:
