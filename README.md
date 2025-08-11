@@ -107,16 +107,14 @@ python3 S1_PreProcessing.py --job_id XXXXXXX
 ```
 
 ### S2: Train Autoencoder
-NOT on LXPLUS:
+ON SWAN/LXPLUS:
+- Run it via the SWAN terminal, or ` source /cvmfs/sft.cern.ch/lcg/views/LCG_108_swan/x86_64-el9-gcc13-opt/setup.sh` on lxplus
+
+For NON CERN users:
 ```=shell
 conda create --name pytorch python=3.9
 conda activate pytorch
 pip3 install -r requirementsTraining.txt
-```
-
-ON LXPLUS:
-```=shell
-source /cvmfs/sft.cern.ch/lcg/views/LCG_108_swan/x86_64-el9-gcc13-opt/setup.sh
 ```
 
 ```=shell
@@ -124,13 +122,13 @@ python3 S2_training.py --job_id XXXXXXX --ring ["in" or "out"]
 ```
 
 ### S3: Generate fake anomalies
+(same environment as S2)
 ```=shell
-conda activate pytorch (or source /cvmfs/sft.cern.ch/lcg/views/LCG_108_swan/x86_64-el9-gcc13-opt/setup.sh)
 python3 S3_GenerateAnomaly.py --job_id XXXXXXX --ring ["in" or "out"]
 ```
 ### S4: Study model performance with the fake anomalies
+(same environment as S2)
 ```=shell
-conda activate pytorch (or source /cvmfs/sft.cern.ch/lcg/views/LCG_108_swan/x86_64-el9-gcc13-opt/setup.sh)
 python3 S4_performance.py --job_id XXXXXXX --ring ["in" or "out"]
 ```
 Optional argument: ` --anomalysample ` path to a custom set of anomalies
