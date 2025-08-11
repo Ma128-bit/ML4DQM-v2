@@ -14,7 +14,7 @@ parser.add_argument("--conda_env", type=str, default="/lustrehome/mbuonsante/min
 args = parser.parse_args()
 
 conda_env = args.conda_env
-me = args.me
+me = args.mename
 path = args.path
 job_id, job_path = db.create_new_job_folder(me)
 
