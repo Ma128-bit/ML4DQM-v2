@@ -1,0 +1,7 @@
+pandas
+tqdm
+cmsdials
+htcondor
+classad
+pyarrow
+argparse

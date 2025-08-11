@@ -1,0 +1,47 @@
+# Configuration file for MEs and training parameters
+
+# Section for MEs metadata
+MEs:
+  hRHGlobalm1:
+    camera_name: "ME-1"      
+    ring_in: [[1, 90]] #ring_id, N. sectors
+    ring_out: [[2, 180], [3, 180]]
+  hRHGlobalm2:
+    camera_name: "ME-2"
+    ring_in: [[1, 90]]
+    ring_out: [[2, 180]]
+  hRHGlobalm3:
+    camera_name: "ME-3"
+    ring_in: [[1, 90]]
+    ring_out: [[2, 180]]
+  hRHGlobalm4:
+    camera_name: "ME-4"
+    ring_in: [[1, 90]]
+    ring_out: [[2, 180]]
+  hRHGlobalp1:
+    camera_name: "ME+1"      
+    ring_in: [[1, 90]] #ring_id, N. sectors
+    ring_out: [[2, 180], [3, 180]]
+  hRHGlobalp2:
+    camera_name: "ME+2"
+    ring_in: [[1, 90]]
+    ring_out: [[2, 180]]
+  hRHGlobalp3:
+    camera_name: "ME+3"
+    ring_in: [[1, 90]]
+    ring_out: [[2, 180]]
+  hRHGlobalp4:
+    camera_name: "ME+4"
+    ring_in: [[1, 90]]
+    ring_out: [[2, 180]]
+
+
+preprocessing:
+  lumimin: 6.4
+
+training:
+  batch_size: 64                  
+  learning_rate: 2.e-4        
+  epochs: 50           
+  patience: 4        
+  threshold: 0.005     
