@@ -1,2 +1,6 @@
 pyyaml
 tqdm
+numpy
+pytz
+pandas
+torch
