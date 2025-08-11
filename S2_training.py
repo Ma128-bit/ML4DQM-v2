@@ -18,10 +18,10 @@ class METraining:
         self.training_params = config["training"]
         self.chamber_params = config["MEs"][self.me_name]
         ring_info = self.chamber_params["ring_"+ring]
-        if len(ring_info==1):
+        if len(ring_info)==1:
             self.ring_div = ring_info[0][1]
         else:
-            self.ring_div = ring_info[0][0][1]
+            raise RuntimeError("Multi-ring not implemented yet (hRHGlobalm1)")
 
     def update_jobid(self, job_id):
         self.output_path = os.path.join("outputs", self.me_name+"-"+job_id)
