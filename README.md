@@ -102,6 +102,7 @@ Returns a `job_id`!!
 ### S1: Pre-Processing and sum of consecutive LSs
 ```=shell
 conda activate PrePro
+python3 hltScale.py 
 python3 S1_PreProcessing.py --job_id XXXXXXX
 ```
 
