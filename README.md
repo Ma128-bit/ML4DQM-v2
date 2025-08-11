@@ -52,7 +52,6 @@ The first time you run the code, you need to perform:
 ```=shell
 python3
 import Utilities.database as db
-pip3 install -r requirementsPrePro.txt 
 db.init_db()
 ```
 
