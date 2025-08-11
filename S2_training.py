@@ -36,7 +36,7 @@ class METraining:
         print("[S2] Training completed!")
 
     def predictions(self):
-        self.monitoring_elements = ResNet.predictions(self.monitoring_elements, self.model, "img_"+ring, ring_div)
+        self.monitoring_elements = ResNet.predictions(self.monitoring_elements, self.model, "img_"+ring, self.ring_div)
         print("[S2] Predictions completed!")
 
     def save(self):
