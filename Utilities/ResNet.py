@@ -84,7 +84,7 @@ class ModelTrainer:
         # Inizializzazione del modello
         self.model = ResNetAE(1, 3, [16, 32, 64], img_size=self.img_size).to(self.device)
         self.optimizer = optim.Adam(self.model.parameters(), lr=self.learning_rate)
-        self.scheduler = ReduceLROnPlateau(self.optimizer, 'min', factor=0.5, patience=2, threshold=0.02, verbose=True)
+        self.scheduler = ReduceLROnPlateau(self.optimizer, 'min', factor=0.5, patience=2, threshold=0.02)
         
         self.train_loss = []
         self.val_loss = []
