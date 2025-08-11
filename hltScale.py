@@ -6,6 +6,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import glob
 import Utilities.database as db
+import argparse
 
 # === MODEL FUNCTIONS ===
 def exp_mod(x, a, b):
@@ -165,8 +166,13 @@ def plot_all_fits(fit_results, b_fixed, x_range=(0, 0.5)):
     
 if __name__ == "__main__":
     os.makedirs("hltScalePlots", exist_ok=True)
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--job_id", type=str, required=True, help="job_id")
     
-    df = load_data()
+    args = parser.parse_args()
+    job_id = args.job_id
+    
+    df = load_data(job_id)
     print(df.head())
     plot_3d(df)
     
