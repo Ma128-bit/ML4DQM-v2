@@ -23,8 +23,9 @@ min_file_size = 601     # minimum file size in bytes
 
 # Find all subdirectories
 dirs = [os.path.join(path, d) for d in os.listdir(path) if os.path.isdir(os.path.join(path, d))]
+only_names = [os.path.basename(d) for d in dirs]
 print("The following MEs were found:")
-print(dirs)
+print(only_names)
 
 # Collect all valid Parquet files using glob
 all_files = []
@@ -54,6 +55,7 @@ for f in all_files:
 if current_batch:
     batches.append(current_batch)
 
+index=0
 # Process each batch
 for batch_idx, file_group in enumerate(tqdm(batches, desc="Processing batches", unit="batch"), start=1):
     batch_size_mb = sum(os.path.getsize(f) for f in file_group) / (1024 * 1024)
