@@ -22,7 +22,7 @@ max_group_size = 500 * (1024**2)  # maximum total group size in MB
 min_file_size = 601     # minimum file size in bytes
 
 # Find all subdirectories
-dirs = [os.path.join(path, d) for d in os.listdir(path) if os.path.isdir(os.path.join(path, d))]
+dirs = [os.path.join(path, d) for d in os.listdir(path) if me in d and os.path.isdir(os.path.join(path, d))]
 only_names = [os.path.basename(d) for d in dirs]
 print("The following MEs were found:")
 print(only_names)
