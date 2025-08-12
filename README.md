@@ -9,7 +9,7 @@ git clone https://github.com/Ma128-bit/ML4DQM.git
 ```=shell
 conda create --name MEProd python=3.9
 conda activate MEProd
-pip3 install -r requirements_getME.txt 
+pip3 install -r requirementsMEProd.txt 
 chmod +x submit.sh
 ```
 Use `Submit_getMEwithDIALS.py` to submit (with **condor**) the code, based on [dials_api](https://github.com/cms-DQM/dials-py), that gets the MEs. List of arguments:
