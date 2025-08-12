@@ -65,7 +65,7 @@ for batch_idx, file_group in enumerate(tqdm(batches, desc="Processing batches", 
     
     run_list = np.sort(np.unique(monitoring_elements["run_number"].unique()))
     command = f"conda run --prefix {conda_env} python3 Utilities/getInfo.py '{json.dumps(run_list.tolist())}' perLSinfo.parquet"
-    subprocess.run(command, text=True, shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL);
+    subprocess.run(command, text=True, shell=True);
     
     lumi_info = pd.read_parquet("perLSinfo.parquet")
     
