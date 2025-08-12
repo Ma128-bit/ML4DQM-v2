@@ -59,7 +59,7 @@ index=0
 # Process each batch
 for batch_idx, file_group in enumerate(tqdm(batches, desc="Processing batches", unit="batch"), start=1):
     batch_size_mb = sum(os.path.getsize(f) for f in file_group) / (1024 * 1024)
-    print(f"\nProcessing batch {batch_idx} ({len(file_group)} files, {batch_size_mb:.2f} MB)")
+    # print(f"\nProcessing batch {batch_idx} ({len(file_group)} files, {batch_size_mb:.2f} MB)")
     monitoring_elements = pd.read_parquet(file_group)
     monitoring_elements = monitoring_elements[monitoring_elements['dataset'].str.contains("StreamExpress")]
     
