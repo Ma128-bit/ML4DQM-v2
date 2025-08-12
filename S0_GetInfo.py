@@ -18,7 +18,7 @@ me = args.mename
 path = args.path
 job_id, job_path = db.create_new_job_folder(me)
 
-max_group_size = 500 (1024**2)  # maximum total group size in MB
+max_group_size = 500 * (1024**2)  # maximum total group size in MB
 min_file_size = 601     # minimum file size in bytes
 
 # Find all subdirectories
