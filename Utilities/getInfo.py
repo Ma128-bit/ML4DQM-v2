@@ -18,7 +18,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 run_list = np.array(ast.literal_eval(sys.argv[1]))
 file_path = sys.argv[2]
 
-def getruninfo(runID, max_retries=60, retry_delay=2):
+def getruninfo(runID, max_retries=60, retry_delay=1):
     info = {"run_number": int(runID), "class": "", "cscGOOD": 0, "cscSTANDBY": 0, "cscBAD": 0, "cscEMPTY": 0}
     for attempt in range(max_retries):
         try:
