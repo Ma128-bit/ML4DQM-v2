@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 from tqdm import tqdm
-import os, subprocess, json
+import os, subprocess, json, glob
 import argparse
 import Utilities.database as db
 
@@ -18,18 +18,47 @@ me = args.mename
 path = args.path
 job_id, job_path = db.create_new_job_folder(me)
 
-dirs = os.listdir(path)
-me_dirs = [path+i for i in dirs if me in i and os.path.isdir(path+i)]
-print("The following MEs were found:")
-print(me_dirs)
+max_group_size = 500 (1024**2)  # maximum total group size in MB
+min_file_size = 601     # minimum file size in bytes
 
-index = 0
-for dir in tqdm(me_dirs, desc="Processing MEs"):
-    files = os.listdir(dir)
-    me_files = [dir+"/"+i for i in files if me in i]
-    filtered_files = [file for file in me_files if os.path.exists(file) and os.path.getsize(file) >= 601]
-    
-    monitoring_elements = pd.read_parquet(filtered_files)
+# Find all subdirectories
+dirs = [os.path.join(path, d) for d in os.listdir(path) if os.path.isdir(os.path.join(path, d))]
+print("The following MEs were found:")
+print(dirs)
+
+# Collect all valid Parquet files using glob
+all_files = []
+for dir in dirs:
+    pattern = os.path.join(dir, '*.parquet')
+    for fpath in glob.glob(pattern):
+        if os.path.getsize(fpath) >= min_file_size:
+            all_files.append(fpath)
+
+print(f"Found {len(all_files)} valid files.")
+
+# Group files by total size not exceeding max_group_size
+batches = []
+current_batch = []
+current_size = 0
+
+for f in all_files:
+    fsize = os.path.getsize(f)
+    if current_size + fsize > max_group_size and current_batch:
+        batches.append(current_batch)
+        current_batch = []
+        current_size = 0
+    current_batch.append(f)
+    current_size += fsize
+
+# Add the last batch if it's not empty
+if current_batch:
+    batches.append(current_batch)
+
+# Process each batch
+for batch_idx, file_group in enumerate(tqdm(batches, desc="Processing batches", unit="batch"), start=1):
+    batch_size_mb = sum(os.path.getsize(f) for f in file_group) / (1024 * 1024)
+    print(f"\nProcessing batch {batch_idx} ({len(file_group)} files, {batch_size_mb:.2f} MB)")
+    monitoring_elements = pd.read_parquet(file_group)
     monitoring_elements = monitoring_elements[monitoring_elements['dataset'].str.contains("StreamExpress")]
     
     run_list = np.sort(np.unique(monitoring_elements["run_number"].unique()))
