@@ -18,30 +18,28 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 run_list = np.array(ast.literal_eval(sys.argv[1]))
 file_path = sys.argv[2]
 
-def getruninfo(runID):
-    dict = {"run_number": int(runID), "class": "", "cscGOOD": 0, "cscSTANDBY":0, "cscBAD":0, "cscEMPTY":0}
-    try:
-        run = runregistry.get_run(run_number=int(runID))
-        dict["class"]=run["class"]
-    except:
-        dict["class"]="BAD"
-        return dict
-    if 'csc-csc' in run["lumisections"]:
-        data_dict = run["lumisections"]["csc-csc"]
-        for key in data_dict.keys():
-            if key == "GOOD":
-                dict["cscGOOD"] = data_dict["GOOD"]
-            if key == "STANDBY":
-                dict["cscSTANDBY"] = data_dict["STANDBY"]
-            if key == "BAD":
-                dict["cscBAD"] = data_dict["BAD"]
-            if key == "EMPTY":
-                dict["cscEMPTY"] = data_dict["EMPTY"]
-        del data_dict
-    else:
-        dict["class"]="BAD"
-    del run
-    return dict
+def getruninfo(runID, max_retries=60, retry_delay=2):
+    info = {"run_number": int(runID), "class": "", "cscGOOD": 0, "cscSTANDBY": 0, "cscBAD": 0, "cscEMPTY": 0}
+    for attempt in range(max_retries):
+        try:
+            run = runregistry.get_run(run_number=int(runID))
+            info["class"] = run["class"]
+            if 'csc-csc' in run["lumisections"]:
+                data_dict = run["lumisections"]["csc-csc"]
+                info["cscGOOD"]    = data_dict.get("GOOD", 0)
+                info["cscSTANDBY"] = data_dict.get("STANDBY", 0)
+                info["cscBAD"]     = data_dict.get("BAD", 0)
+                info["cscEMPTY"]   = data_dict.get("EMPTY", 0)
+            else:
+                info["class"] = "BAD"
+            return info  # Se arriva qui, tutto è andato bene
+        except Exception as e:
+            print(f"[Tentativo {attempt+1}/{max_retries}] Errore: {e}")
+            if attempt < max_retries - 1:
+                time.sleep(retry_delay)
+            else:
+                info["class"] = "BAD"
+                return info
     
 def getLSinfo(runID):
     df_temp = []
