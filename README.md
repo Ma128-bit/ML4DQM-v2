@@ -73,6 +73,12 @@ sys.path.append('./oms-api-client')
 ```
 where `run registry site` is obtained usign: `pip show runregistry`
 
+**Note:** since in SWAN you are using an LCG release that you are note allowed to modify, you have to:
+
+1 - Install the packages in user scope with `pip install omsapi runregistry --user`
+
+2 - Make sure that your SWAN session has access to packages installed in your `/eos` are by checking the "Use Python packages installed on CERNBox" box when starting your session
+
 **For all users:**
 
 Follow the "Authentication Prerequisites" instructions on [runregistry_api_client](https://github.com/cms-DQM/runregistry_api_client). Then follow [oms-api-client](https://gitlab.cern.ch/cmsoms/oms-api-client) instructions. (You can use the same application for both runregistry and oms)
