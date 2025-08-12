@@ -91,7 +91,7 @@ Run: `python3 S0_GetInfo.py`. List of arguments:
 
 | Argument                   | Default     | Required | Description                                |
 | -------------------------- | :--------:  | :------: | ------------------------------------------ |
-| `-p / --path`              | csc         | True     | ME parquet file location                   |
+| `-p / --path`              |                | True     | ME parquet file location                   |
 | `-m / --mename`            | hRHGlobalm2 | True     | One monitoring element.                    |
 | `--conda_env`              |             | True     | Path to conda env (like ~/miniconda3/envs/oms) |
 
