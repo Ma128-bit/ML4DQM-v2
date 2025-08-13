@@ -9,7 +9,7 @@ git clone https://github.com/Ma128-bit/ML4DQM.git
 ```=shell
 conda create --name MEProd python=3.9
 conda activate MEProd
-pip3 install -r requirements_getME.txt 
+pip3 install -r requirementsMEProd.txt 
 chmod +x submit.sh
 ```
 Use `Submit_getMEwithDIALS.py` to submit (with **condor**) the code, based on [dials_api](https://github.com/cms-DQM/dials-py), that gets the MEs. List of arguments:
@@ -72,6 +72,12 @@ sys.path.append('run registry site')
 sys.path.append('./oms-api-client')
 ```
 where `run registry site` is obtained usign: `pip show runregistry`
+
+**Note:** since in SWAN you are using an LCG release that you are note allowed to modify, you have to:
+
+1 - Install the packages in user scope with `pip install omsapi runregistry --user`
+
+2 - Make sure that your SWAN session has access to packages installed in your `/eos` are by checking the "Use Python packages installed on CERNBox" box when starting your session
 
 **For all users:**
 
