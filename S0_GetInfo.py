@@ -5,6 +5,11 @@ import os, subprocess, json, glob
 import argparse
 import Utilities.database as db
 
+required_files = [".env", "config.yaml"]
+for f in required_files:
+    if not os.path.exists(f):
+        raise FileNotFoundError(f"The following required file is missing: {f}")
+    
 parser = argparse.ArgumentParser()
 #parser.add_argument("--out_label", type=str, default="test", help="output label")
 parser.add_argument('-m', '--mename', type=str, default="hRHGlobalm2", help="ME name")
