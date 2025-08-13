@@ -215,8 +215,6 @@ def list_recent_jobs(limit=5):
         print(f"  ID: {job_id}")
         print(f"  Stato: {status_str}")
         print("-" * 80)
-
-    return jobs
     
 def delete_empty_jobs(base_path="outputs"):
     """
