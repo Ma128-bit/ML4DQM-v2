@@ -188,7 +188,7 @@ def list_recent_jobs(limit=5):
     conn = sqlite3.connect(DB_NAME)
     c = conn.cursor()
     c.execute(f"""
-        SELECT job_id, MEname, job_label, created_at, {", ".join(STEPS)}
+        SELECT job_id, MEname, created_at, {", ".join(STEPS)}
         FROM {TABLE_NAME}
         ORDER BY created_at DESC
         LIMIT ?
@@ -200,26 +200,24 @@ def list_recent_jobs(limit=5):
     print(f"\nUltimi {limit} job nel database:")
     print("=" * 80)
     for row in rows:
-        job_id, MEname, label, created_at, *steps = row
+        job_id, MEname, created_at, *steps = row
         status = {step: bool(s) for step, s in zip(STEPS, steps)}
         jobs.append({
             "job_id": job_id,
             "MEname": MEname,
-            "label": label,
             "created_at": created_at,
             "status": status
         })
 
         # Stampa in modo leggibile
-        label_str = f" ({label})" if label else ""
         status_str = " | ".join(f"{k}:{'✔' if v else '✘'}" for k, v in status.items())
-        print(f"{created_at}  {MEname}{label_str}")
+        print(f"{created_at}  {MEname}")
         print(f"  ID: {job_id}")
         print(f"  Stato: {status_str}")
         print("-" * 80)
 
     return jobs
-
+    
 def delete_empty_jobs(base_path="outputs"):
     """
     Cancella tutti i job che hanno S0 = NULL dal database e rimuove le directory di output.
