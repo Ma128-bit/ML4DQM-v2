@@ -220,7 +220,7 @@ def list_recent_jobs(limit=5):
 
     return jobs
 
-def delete_jobs_with_empty_S0(base_path="outputs"):
+def delete_empty_jobs(base_path="outputs"):
     """
     Cancella tutti i job che hanno S0 = NULL dal database e rimuove le directory di output.
     """
