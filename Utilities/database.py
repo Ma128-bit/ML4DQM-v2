@@ -2,6 +2,7 @@ import sqlite3
 import os
 import secrets
 import string
+import shutil
 from datetime import datetime
 
 DB_NAME = "job_database.db"
@@ -182,3 +183,74 @@ def get_job_status(job_id):
     if job_info is None:
         return None
     return {step: (job_info[step] is not None) for step in STEPS}
+
+def list_recent_jobs(limit=5):
+    conn = sqlite3.connect(DB_NAME)
+    c = conn.cursor()
+    c.execute(f"""
+        SELECT job_id, MEname, job_label, created_at, {", ".join(STEPS)}
+        FROM {TABLE_NAME}
+        ORDER BY created_at DESC
+        LIMIT ?
+    """, (limit,))
+    rows = c.fetchall()
+    conn.close()
+
+    jobs = []
+    print(f"\nUltimi {limit} job nel database:")
+    print("=" * 80)
+    for row in rows:
+        job_id, MEname, label, created_at, *steps = row
+        status = {step: bool(s) for step, s in zip(STEPS, steps)}
+        jobs.append({
+            "job_id": job_id,
+            "MEname": MEname,
+            "label": label,
+            "created_at": created_at,
+            "status": status
+        })
+
+        # Stampa in modo leggibile
+        label_str = f" ({label})" if label else ""
+        status_str = " | ".join(f"{k}:{'✔' if v else '✘'}" for k, v in status.items())
+        print(f"{created_at}  {MEname}{label_str}")
+        print(f"  ID: {job_id}")
+        print(f"  Stato: {status_str}")
+        print("-" * 80)
+
+    return jobs
+
+def delete_jobs_with_empty_S0(base_path="outputs"):
+    """
+    Cancella tutti i job che hanno S0 = NULL dal database e rimuove le directory di output.
+    """
+    conn = sqlite3.connect(DB_NAME)
+    c = conn.cursor()
+
+    # Prendo tutti i job con S0 vuota
+    c.execute(f"SELECT job_id, MEname FROM {TABLE_NAME} WHERE S0 IS NULL")
+    jobs_to_delete = c.fetchall()
+
+    if not jobs_to_delete:
+        print("Nessun job con S0 vuota trovato.")
+        conn.close()
+        return
+
+    print(f"Trovati {len(jobs_to_delete)} job con S0 vuota. Li cancello...")
+    for job_id, MEname in jobs_to_delete:
+        job_dir = os.path.join(base_path, f"{MEname}-{job_id}")
+        
+        # Cancella directory se esiste
+        if os.path.exists(job_dir):
+            shutil.rmtree(job_dir)
+            print(f"  🗑  Directory rimossa: {job_dir}")
+        else:
+            print(f"  ⚠️  Directory non trovata: {job_dir}")
+
+        # Rimuovi entry dal DB
+        c.execute(f"DELETE FROM {TABLE_NAME} WHERE job_id = ?", (job_id,))
+        print(f"  🗑  Entry DB rimossa: job_id={job_id}")
+
+    conn.commit()
+    conn.close()
+    print("Operazione completata.")
