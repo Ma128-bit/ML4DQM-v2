@@ -185,7 +185,7 @@ if __name__ == "__main__":
     # 3. Plot finale comparativo di tutti i fit
     plot_all_fits(fit_results, b_fixed)
 
-    hlt_scale = {"2p0E34": np.float64(1.0)}
+    hlt_scale = {"2p0E34": np.float32(1.0)}
     for k in fit_results.keys():
         hlt_scale[k] = fit_results[k]["a"]/a_ref
 
