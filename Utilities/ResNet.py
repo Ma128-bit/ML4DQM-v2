@@ -10,7 +10,7 @@ from torch.optim.lr_scheduler import ReduceLROnPlateau
 
 def train(df: pd.DataFrame, output_path: str, data_name: str, batch_size: int = 64, epochs: int = 50, learning_rate: float = 2.e-4, patience: int = 4, threshold: float = 0.005) -> torch.jit.ScriptModule:
     #df = df[df["good_flag"]==0]
-    df[data_name] = df[data_name].apply(lambda histo: np.vstack(histo).astype(np.float64))
+    df[data_name] = df[data_name].apply(lambda histo: np.vstack(histo).astype(np.float32))
     #df[data_name] = df[data_name].apply(lambda histo: np.array(histo, dtype=np.float64))
 
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
