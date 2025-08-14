@@ -31,7 +31,7 @@ class MEGenerateAnomaly:
         self.output_name = self.output_path + os.sep + self.me_name+'_'+ring+'_step3.parquet'
 
     def load_data(self):
-        self.monitoring_elements = pd.concat( [pd.read_parquet(f, engine="pyarrow") for f in file_paths], ignore_index=True )
+        self.monitoring_elements = pd.concat( [pd.read_parquet(f, engine="pyarrow") for f in self.file_path], ignore_index=True )
         self.monitoring_elements["img_"+ring] = self.monitoring_elements["img_"+ring].apply(lambda histo: np.vstack(histo).astype(np.float64))
 
     def genanomay(self):
