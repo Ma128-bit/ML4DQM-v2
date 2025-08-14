@@ -1,4 +1,4 @@
-import os, json, subprocess, argparse
+import os, json, subprocess, argparse, glob
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -9,7 +9,7 @@ class MEPerformance:
     def __init__(self, job_id, ring, anomalysample):
         self.ring = ring
         self.station = ""
-        self.good_data_path = db.get_job_info(job_id)["S2"]
+        self.good_data_path = glob.glob(db.get_job_info(job_id)["S2"])
         if anomalysample==None:
             self.anomaly_data_path = db.get_job_info(job_id)["S3"]
         else:
@@ -25,7 +25,7 @@ class MEPerformance:
         self.output_path = os.path.join("outputs", self.me_name+"-"+job_id) + os.sep + self.me_name+'_'+ring+'_step4'
 
     def load_data(self):
-        self.good_data = pd.read_parquet(self.good_data_path, engine='pyarrow', columns=self.metrics)
+        self.good_data = pd.concat( [pd.read_parquet(f, engine="pyarrow", columns=self.metrics) for f in self.good_data_path], ignore_index=True )
         self.anomaly_data = pd.read_parquet(self.anomaly_data_path, engine='pyarrow', columns=self.metrics)
 
     def compute_performance(self, metic, direction):
