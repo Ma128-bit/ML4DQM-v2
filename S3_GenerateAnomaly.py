@@ -1,4 +1,4 @@
-import os, json, subprocess, argparse, yaml
+import os, json, subprocess, argparse, yaml, glob
 import numpy as np
 import pandas as pd
 import Utilities.database as db
@@ -9,7 +9,7 @@ device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 class MEGenerateAnomaly:
     def __init__(self, job_id, ring):
         self.ring = ring
-        self.file_path = db.get_job_info(job_id)["S2"]
+        self.file_path = glob.glob(db.get_job_info(job_id)["S2"])
         self.me_name = db.get_job_info(job_id)["MEname"]
         self.output_path = os.path.join("outputs", self.me_name+"-"+job_id)
         self.output_name = self.output_path + os.sep + self.me_name+'_'+ring+'_step3.parquet'
@@ -31,7 +31,7 @@ class MEGenerateAnomaly:
         self.output_name = self.output_path + os.sep + self.me_name+'_'+ring+'_step3.parquet'
 
     def load_data(self):
-        self.monitoring_elements = pd.read_parquet(self.file_path, engine='pyarrow')
+        self.monitoring_elements = pd.concat( [pd.read_parquet(f, engine="pyarrow") for f in file_paths], ignore_index=True )
         self.monitoring_elements["img_"+ring] = self.monitoring_elements["img_"+ring].apply(lambda histo: np.vstack(histo).astype(np.float64))
 
     def genanomay(self):
