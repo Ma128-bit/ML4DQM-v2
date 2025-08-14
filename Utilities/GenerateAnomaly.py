@@ -20,7 +20,7 @@ def batch_generator(df, batch_size):
 def main(df, model, ring, ring_id, num_sectors, max_loss=0.4, min_loss=-0.25):
     df = df[df["max_loss"] < max_loss]
     df = df[df["min_loss"] > min_loss]
-    df = df.sample(frac=min(round(6000./len(df), 2), 1.0), random_state=42)
+    df = df.sample(frac=min(round(5000./len(df), 2), 1.0), random_state=42)
     df_merged_list = []
     batches = list(batch_generator(df, int(len(df)/16) + 1))
     #for batch_df in batch_generator(df, int(len(df)/10) + 1 ):
