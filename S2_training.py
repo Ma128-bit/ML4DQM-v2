@@ -1,6 +1,7 @@
 import os, json, subprocess, argparse, yaml, torch
 import numpy as np
 import pandas as pd
+from tqdm import tqdm
 import Utilities.database as db
 import Utilities.ResNet as ResNet
 
@@ -10,7 +11,7 @@ class METraining:
         self.file_path = db.get_job_info(job_id)["S1"]
         self.me_name = db.get_job_info(job_id)["MEname"]
         self.output_path = os.path.join("outputs", self.me_name+"-"+job_id)
-        self.output_name = self.output_path + os.sep + self.me_name+'_'+ring+'_step2.parquet'
+        self.output_name = self.output_path + os.sep + self.me_name+'_'+ring+'_step2'
         self.monitoring_elements = None
         self.model = None
         with open("chamber_config.yaml", "r") as f:
@@ -25,7 +26,7 @@ class METraining:
 
     def update_jobid(self, job_id):
         self.output_path = os.path.join("outputs", self.me_name+"-"+job_id)
-        self.output_name = self.output_path + os.sep + self.me_name+'_'+ring+'_step2.parquet'
+        self.output_name = self.output_path + os.sep + self.me_name+'_'+ring+'_step2'
     
     def load_data(self):
         self.monitoring_elements = pd.read_parquet(self.file_path, engine='pyarrow')
@@ -43,19 +44,41 @@ class METraining:
         self.model = scripted_model
         print("[S2] Training completed!")
 
-    def predictions(self):
-        self.monitoring_elements = ResNet.predictions(self.monitoring_elements, self.model, "img_"+ring, self.ring_div)
-        print("[S2] Predictions completed!")
+    def pred_save_batches(self, batch_size=4096):
+        num_rows = len(self.monitoring_elements)
+        num_batches = (num_rows + batch_size - 1) // batch_size
+    
+        for batch_id in tqdm(range(num_batches), desc="[S2] Predicting and Saving Batches", unit="batch"):
+            batch_pred = self.predictions(batch_id, batch_size)
+            self.save(batch_pred, batch_id)
+            del batch_pred
+        
+    def predictions(self, batch_id, batch_size):
+        start = batch_id * batch_size
+        end = min(start + batch_size, len(self.monitoring_elements))
+        batch = self.monitoring_elements.iloc[start:end]
+    
+        batch_pred = ResNet.predictions(batch, self.model, "img_"+ring, self.ring_div)
+        return batch_pred
+    
+    def save(self, batch_pred, batch_id):
+        batch_pred.to_parquet(self.output_name+f"_part{batch_id}.parquet", engine="pyarrow", index=False)
+        del batch_pred
+    
+    #def predictions(self):
+    #    self.monitoring_elements = ResNet.predictions(self.monitoring_elements, self.model, "img_"+ring, self.ring_div)
+    #    print("[S2] Predictions completed!")
 
-    def save(self):
-        self.monitoring_elements.to_parquet(self.output_name, index=False)
-        print("[S2] Saving completed!")
+    #def save(self):
+    #    self.monitoring_elements.to_parquet(self.output_name, index=False)
+    #    print("[S2] Saving completed!")
 
     def run(self):
         self.load_data()
         self.training()
-        self.predictions()
-        self.save()
+        self.pred_save_batches()
+        #self.predictions()
+        #self.save()
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
