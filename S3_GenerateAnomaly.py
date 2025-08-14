@@ -32,7 +32,7 @@ class MEGenerateAnomaly:
 
     def load_data(self):
         self.monitoring_elements = pd.concat( [pd.read_parquet(f, engine="pyarrow") for f in self.file_path], ignore_index=True )
-        self.monitoring_elements["img_"+ring] = self.monitoring_elements["img_"+ring].apply(lambda histo: np.vstack(histo).astype(np.float64))
+        self.monitoring_elements["img_"+ring] = self.monitoring_elements["img_"+ring].apply(lambda histo: np.vstack(histo).astype(np.float32))
 
     def genanomay(self):
         self.df_anomalies = anomaly.main(self.monitoring_elements, self.model, "img_"+self.ring, self.ring_info[0], self.ring_info[1])
