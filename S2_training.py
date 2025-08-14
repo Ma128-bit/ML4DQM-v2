@@ -92,10 +92,10 @@ if __name__ == "__main__":
     analyzer = METraining(job_id=job_id, ring=ring)
 
     change_jobid = False
-    job_id_new, _ = db.update_step(job_id, "S2", analyzer.output_name)
+    job_id_new, _ = db.update_step(job_id, "S2", analyzer.output_name+"_part*.parquet")
     if job_id_new != job_id:
         analyzer.update_jobid(job_id_new)
-        db.update_step(job_id_new, "S2", analyzer.output_name)
+        db.update_step(job_id_new, "S2", analyzer.output_name+"_part*.parquet")
         change_jobid = True
 
 
