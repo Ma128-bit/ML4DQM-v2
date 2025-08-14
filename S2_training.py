@@ -56,7 +56,7 @@ class METraining:
     def predictions(self, batch_id, batch_size):
         start = batch_id * batch_size
         end = min(start + batch_size, len(self.monitoring_elements))
-        batch = self.monitoring_elements.iloc[start:end]
+        batch = self.monitoring_elements.iloc[start:end].copy()
     
         batch_pred = ResNet.predictions(batch, self.model, "img_"+ring, self.ring_div)
         return batch_pred
