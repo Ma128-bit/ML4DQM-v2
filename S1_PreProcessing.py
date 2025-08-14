@@ -18,7 +18,7 @@ def sum_images(group):
         "ls_max": group["ls_number"].iloc[-1],
         "prescale": [f'{count}x"{val}"' for val, count in zip(*np.unique(group["prescale_name"], return_counts=True))],
         "summed_ls": len(group["entries"]),
-        "img": np.sum(group["data"], axis=0).astype(np.float64),
+        "img": np.sum(group["data"], axis=0).astype(np.float32),
     })
 
 def sum_row_images(row, columns):
